@@ -2,7 +2,7 @@
 
 		http://adventofcode.com/2016/day/1
 
-							col--			  col++
+							                 col--			  col++
 							
 		
                                        ^
@@ -11,9 +11,9 @@
                                        N           
                                        |
                                        |
-		 					R          |             L
-					    <-------W --------------- E------>
-	     					L          |             R
+		 				              	R          |             L
+					            <-------W --------------- E------>
+	     					            L          |             R
                                        |
                                        |
                                        S                                       
@@ -32,24 +32,24 @@ val cols = 500
 
 var matrix = Array.ofDim[Int](rows, cols)
 
-def direct(d: Char, step: Char) : Char = d match {
-		case 'N' => step match {
-			case 'R' => 'E'
-			case 'L' => 'W'
-		}
-		case 'S' => step match {
-			case 'R' => 'W'
-			case 'L' => 'E'
-		}
-		case 'E' => step match {
-			case 'R' => 'S'
-			case 'L' => 'N'
-		}
-		case 'W' => step match {
-			case 'R' => 'N'
-			case 'L' => 'S'
-		}
-	}
+def direct(d: Char, step: Char): Char = d match {
+  case 'N' => step match {
+    case 'R' => 'E'
+    case 'L' => 'W'
+  }
+  case 'S' => step match {
+    case 'R' => 'W'
+    case 'L' => 'E'
+  }
+  case 'E' => step match {
+    case 'R' => 'S'
+    case 'L' => 'N'
+  }
+  case 'W' => step match {
+    case 'R' => 'N'
+    case 'L' => 'S'
+  }
+}
 
 //init
 var _d = 'N'
@@ -58,54 +58,53 @@ val start_y = 200
 var _x = start_x
 var _y = start_y
 
-var isFound : Boolean = false
-var msg : String = null
+var isFound: Boolean = false
+var msg: String = null
 
-def meetTwice(x: Int, y: Int) = {	
-	if( !isFound && matrix(x)(y) == 2 ) {		
-		isFound = true
+def meetTwice(x: Int, y: Int) = {
+  if (!isFound && matrix(x)(y) == 2) {
+    isFound = true
 
-		msg = s"${Math.abs(start_x - x) + Math.abs(start_y - y)}"
-	}
+    msg = s"${Math.abs(start_x - x) + Math.abs(start_y - y)}"
+  }
 }
 
-for ( step <- input ) 
-{	
-	val pre = _d
-	_d = direct(_d, step.head)
-	
-	println(s"${pre} -- ${step} --> ${_d}")
+for (step <- input) {
+  val pre = _d
+  _d = direct(_d, step.head)
 
-	_d match {
-		case 'N' => {
-						for (i <- _x + 1 to _x + step.tail.toInt) {
-							matrix(i)(_y) += 1
-							meetTwice(i, _y)
-						}
-						_x = _x + step.tail.toInt
-					}
-		case 'S' => {
-						for (i <- _x - step.tail.toInt to _x -1) {
-						 	matrix(i)(_y) += 1
-						 	meetTwice(i, _y)
-						}
-						_x = _x - step.tail.toInt					
-					}
-		case 'E' => {
-						for (j <- _y + 1 to _y + step.tail.toInt) {
-							matrix(_x)(j) += 1
-							meetTwice(_x, j)
-						}
-						_y = _y + step.tail.toInt
-					}
-		case 'W' => {
-						for (j <- _y - step.tail.toInt to _y - 1) {
-							matrix(_x)(j) += 1
-							meetTwice(_x, j)
-						}
-						_y = _y - step.tail.toInt
-					}
-	}
+  println(s"${pre} -- ${step} --> ${_d}")
+
+  _d match {
+    case 'N' => {
+      for (i <- _x + 1 to _x + step.tail.toInt) {
+        matrix(i)(_y) += 1
+        meetTwice(i, _y)
+      }
+      _x = _x + step.tail.toInt
+    }
+    case 'S' => {
+      for (i <- _x - step.tail.toInt to _x - 1) {
+        matrix(i)(_y) += 1
+        meetTwice(i, _y)
+      }
+      _x = _x - step.tail.toInt
+    }
+    case 'E' => {
+      for (j <- _y + 1 to _y + step.tail.toInt) {
+        matrix(_x)(j) += 1
+        meetTwice(_x, j)
+      }
+      _y = _y + step.tail.toInt
+    }
+    case 'W' => {
+      for (j <- _y - step.tail.toInt to _y - 1) {
+        matrix(_x)(j) += 1
+        meetTwice(_x, j)
+      }
+      _y = _y - step.tail.toInt
+    }
+  }
 }
 
 println(s"No blocks of shortest path : ${(Math.abs(start_x - _x) + Math.abs(start_y - _y))}")
